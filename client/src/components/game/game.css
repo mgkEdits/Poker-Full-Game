@@ -124,7 +124,7 @@ justify-content: space-around;
     justify-content: space-between;
     line-height: 1%;
 }
-button{
+/* button{
     float: left;
     background-color: rgb(233, 33, 33);
     text-align: center;
@@ -133,4 +133,4 @@ button{
     font-size: 15px;
     width: 30%;
     color: aliceblue;
-}
+} */

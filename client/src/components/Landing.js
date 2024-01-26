@@ -3,7 +3,7 @@ import Buttons from './Buttons';
 
 const WelcomeMessage = () => {
   return (
-    <div className='landingpage'>
+    <div className='landing-sqr'>
       <h1>Welcome to Poker Land</h1>
       <Buttons />
     </div>

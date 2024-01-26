@@ -1,5 +1,4 @@
 import React from 'react'
-import HomeLayout from './game/homeLayout'
 
 const handleNewGame= (e) => {
   e.preventDefault();
@@ -18,15 +17,17 @@ const handleLogOut= (e) => {
 
 function Home() {
   return (
-    <div>
+    <div className='home-wrp'>
        <div className='right-sqr'>
+       <div className='title-sqr'>
        <h1> Poker Game </h1>
-        </div>
+       </div>
+      </div>
 
       <div className='left-sqr'>
-        <button onClick={handleNewGame}>New Game</button>
-        <button onClick={handleViewScores}>View Scores</button>
-        <button onClick={handleLogOut}> Log Out</button>
+        <button  onClick={handleNewGame}>New Game</button>
+        <button  onClick={handleViewScores}>View Scores</button>
+        <button  onClick={handleLogOut}> Log Out</button>
       </div>
     </div>
   )

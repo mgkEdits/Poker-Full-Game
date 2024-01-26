@@ -1,4 +1,4 @@
-/* src/App.css */
+/* 
 .landingpage {
   text-align: center;
   padding: 40px;
@@ -15,11 +15,11 @@
 .landingpage h1 {
   font-size: 48px;
   color: #fff;
-  background: rgb(83, 83, 250); /* Add this line for white background */
-  padding: 10px; /* Add padding for better visual */
+  background: rgb(83, 83, 250); 
+  padding: 10px; 
 }
 
-/* .buttons {
+.buttons {
   margin-top: 20px;
 }
 

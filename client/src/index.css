@@ -14,23 +14,90 @@ code {
 
 /*-------------------  main-sqr  ------------------------*/
 .main-sqr {
-  background-color: #0f680cea;
+  background-color:  #26D701;
   min-height: 100vh;
   min-width: 100% ;
   display: flex;
   justify-content: space-around;
 }
-/*----------------------------------------------------  Landing Page styling ----------------------------------------------------------------*/
+/*----------------------------------------------------  Home / View Page styling ----------------------------------------------------------------*/
 
-/*-------------------  landing-sqr  ------------------------*/
-.landing-sqr{
+.home-wrp{
   display: flex;
-  background-color: #68670cea;
-  min-height: 80vh;
-  padding: 5%;
-  min-width: 90%;
+  margin-top: 10vh;
+  width: 90%;
+  height: 70vh;
+  background-color: #00AB08;
   justify-content: space-around;
 }
+.right-sqr{
+  border-radius: 1vh;
+  height: 100%;
+  width: 45%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.left-sqr{
+  border-radius: 1vh;
+  height: 100%;
+  width: 45%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.title-sqr{
+  padding-top: 25%;
+}
+
+.score-sqr{
+  font-size: 1.5em;
+  color: rgb(209, 230, 248);
+}
+
+.url{
+  text-decoration:solid;
+}
+/*-------------------  landing page styling  ------------------------*/
+.landing-sqr{
+  display: flex;
+  flex-direction: column;
+  background-color: #00AB08;
+  height: 70vh;
+  padding: 5%;
+  width: 40%;
+  margin-top: 10vh;
+  color: antiquewhite;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+a{
+  text-decoration: none;
+}
+a .btn{
+  font-size: 1.5rem;
+  color: blanchedalmond;
+  background-color: #33A036;
+  margin-top: 5%;
+  padding-left: 43%;
+  text-align: center;
+  border-radius: 10px;
+}
+a .btn:hover{
+  font-size: 1.4rem;
+  color: rgb(71, 67, 60);
+  background-color: #19ebfa;
+  border-radius: 20px;
+
+}
+.btnwrp{
+  margin-top: 20%;
+}
+
+
 /*-------------------  right-sqr  ------------------------*/
 .card-sqr{
   background-color: #c5cec59a;
@@ -64,12 +131,27 @@ input{
   padding-top: 8%;
 
 }
-
 button{
   border: none;
   font-size: 1.5rem;
   width: 80%;
   margin-left:10%;
-  padding: 4%;
-  text-decoration: none; 
+  padding: 7%;
+  text-decoration: none;
+  color: blanchedalmond;
+  background-color: #33A036;
+  margin-top: 15%;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+   
 }
+button:hover{
+  font-size: 1.4rem;
+  color: rgb(71, 67, 60);
+  background-color: #19ebfa;
+  border-radius: 20px;
+}
+
+
+/*-------------------- landing Page Style-----------------------------*/
