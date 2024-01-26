@@ -36,7 +36,7 @@ const Signup = () => {
         setMessage(data.message);
 
         // Redirect to the gamepage
-        window.location.href = '/gamepage';
+        window.location.href = '/Home';
       } else {
         setMessage(data.message);
       }

@@ -38,7 +38,7 @@ const Login = () => {
         setMessage(data.message);
 
         // Redirect to the gamepage after successful login
-        navigate('/gamepage');
+        navigate('/Home');
       } else {
         setMessage(data.message);
       }

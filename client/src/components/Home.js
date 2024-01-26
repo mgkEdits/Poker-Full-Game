@@ -1,8 +1,20 @@
 import React from 'react'
+import HomeLayout from './game/homeLayout'
 
-const newGame = 0;
-const viewScores = 0;
-const logOut = 0;
+const handleNewGame= (e) => {
+  e.preventDefault();
+  window.location.href = '/PokerGame';
+};
+
+const handleViewScores= (e) => {
+  e.preventDefault();
+  window.location.href = '/Standing-Score';
+};
+
+const handleLogOut= (e) => {
+  e.preventDefault();
+  window.location.href = '/';
+};
 
 function Home() {
   return (
@@ -12,9 +24,9 @@ function Home() {
         </div>
 
       <div className='left-sqr'>
-        <button onClick={newGame}>New Game</button>
-        <button onClick={viewScores}>View Scores</button>
-        <button onClick={logOut}> Log Out</button>
+        <button onClick={handleNewGame}>New Game</button>
+        <button onClick={handleViewScores}>View Scores</button>
+        <button onClick={handleLogOut}> Log Out</button>
       </div>
     </div>
   )

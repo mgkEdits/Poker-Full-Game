@@ -5,6 +5,8 @@ import Landing from './components/Landing';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import HomePage from './components/Home';
+import ViewScores from './components/ViewScores';
+import HomeLayout from './components/game/homeLayout'
 import './App.css';
 
 function App() {
@@ -16,6 +18,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/Home" element={<HomePage />} />
+          <Route path="/Standing-Score" element={<ViewScores />} />
+          <Route path="/PokerGame" element={<HomeLayout />} />
         </Routes>
       </div>
     </Router>
