@@ -1,0 +1,136 @@
+/*--------------------------------------------------- Home Layout ------------------------------ -----------------------*/
+.homeLayout-crd{
+    background-color: #26D701;
+    width: 100%;
+    height: 100vh;
+}
+
+/*--------------------------------------------------- NavBar styling------------------------------ -----------------------*/
+.navBar-crd{
+  background-color: #00AB08;
+  height: 4vh;
+  display: flex;
+  padding: 3vh 1vh;
+  overflow: hidden;
+  justify-content: space-between;
+  line-height: 1%;
+  color: aliceblue;
+}
+
+.navCenter-crd{
+    background-color: #00C301;
+    height: 5vh;
+  display: flex;
+  padding: 3vh 1vh;
+  overflow: hidden;
+  justify-content: space-between;
+  line-height: 1%;
+}
+
+.left-navBar a{
+    float: left;
+    color: #2c2929;
+    text-align: center;
+    padding: 1vh 6vh;
+    text-decoration: none;
+    font-size: 25px;
+   
+}
+.right-navBar{
+    padding: 1vh 6vh;
+    text-align: center;
+    float: right;
+    
+}
+
+/*--------------------------------------------------- Body styles------------------------------ -----------------------*/
+
+.crd-wrap{
+    margin-top: 1%;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+
+/*------------------------------- Dec styles----------------------------------*/
+.userDec-crd{
+    background-color:#33A036;
+    border-radius: 1vh;
+    height: 60vh;
+    width: 28%;
+    text-align: center;
+}
+.pcDec-crd{
+    background-color: #33A036;
+    border-radius: 1vh;
+    height: 60vh;
+    width: 28%;
+    text-align: center;
+}
+
+
+
+
+
+/*-------------------------------------------------*/
+
+.crd-shell{
+    border-radius: 1vh;
+    height: 60vh;
+    width: 28%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+.gamedec-crd{
+    background-color:#006400;
+    height: 40vh;
+    width : 100%;
+    margin-bottom: 5%;
+    border-radius: 5%;
+    display: Flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.cardDec-crd{
+    background-color: azure;
+    height: 17dvh;
+    width : 27%;
+    margin-bottom: 5%;
+    border-radius: 10%;
+    justify-content: space-around;
+}
+.crd-crd{
+    background-color: azure;
+    height: 27dvh;
+    width : 35%;
+    border-radius: 10%;
+    justify-content: space-around;
+}
+.crdd-wrp{
+display: flex;
+justify-content: space-around;
+
+}
+
+/*-------------------------------------------------*/
+.btn{
+    height: 4vh;
+    display: flex;
+    padding: 3vh 1vh;
+    overflow: hidden;
+    justify-content: space-between;
+    line-height: 1%;
+}
+button{
+    float: left;
+    background-color: rgb(233, 33, 33);
+    text-align: center;
+    padding: 1vh 6vh;
+    text-decoration: none;
+    font-size: 15px;
+    width: 30%;
+    color: aliceblue;
+}
