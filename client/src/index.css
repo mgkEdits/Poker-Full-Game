@@ -11,3 +11,65 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/*-------------------  main-sqr  ------------------------*/
+.main-sqr {
+  background-color: #0f680cea;
+  min-height: 100vh;
+  min-width: 100% ;
+  display: flex;
+  justify-content: space-around;
+}
+/*----------------------------------------------------  Landing Page styling ----------------------------------------------------------------*/
+
+/*-------------------  landing-sqr  ------------------------*/
+.landing-sqr{
+  display: flex;
+  background-color: #68670cea;
+  min-height: 80vh;
+  padding: 5%;
+  min-width: 90%;
+  justify-content: space-around;
+}
+/*-------------------  right-sqr  ------------------------*/
+.card-sqr{
+  background-color: #c5cec59a;
+  min-width: 40%;
+  max-width: 40%;
+  text-align: center;
+  align-content: center; 
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+}
+
+
+/*----------------------------------------------------  form  styling ----------------------------------------------------------------*/
+.form-rct{
+  background-color: aqua;
+  margin-top: 10%;
+  justify-content: space-around;
+  display: flex;
+  flex-direction: column;
+  min-height: 80%;
+}
+label{
+  font-size: 1.5em;
+  margin-left: 5%;
+}
+input{
+  width: 80%;
+  border-top: none; border-left: none; border-right: none;
+  margin-left: 10%;
+  padding-top: 8%;
+
+}
+
+button{
+  border: none;
+  font-size: 1.5rem;
+  width: 80%;
+  margin-left:10%;
+  padding: 4%;
+  text-decoration: none; 
+}
