@@ -7,6 +7,7 @@ import Signup from './components/Signup';
 import HomePage from './components/Home';
 import ViewScores from './components/ViewScores';
 import HomeLayout from './components/game/homeLayout'
+import GamePage from './components/GamePage'
 import './App.css';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/Home" element={<HomePage />} />
           <Route path="/Standing-Score" element={<ViewScores />} />
           <Route path="/PokerGame" element={<HomeLayout />} />
+          <Route path="/PokerGam" element={<GamePage />} />
         </Routes>
       </div>
     </Router>

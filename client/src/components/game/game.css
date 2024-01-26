@@ -60,7 +60,20 @@
     height: 60vh;
     width: 28%;
     text-align: center;
+    display: flex;
+    flex-wrap: wrap;
 }
+.userDec-crrd{
+    background-color:#33A036;
+    border-radius: 1vh;
+    height: 60vh;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    font-weight: 800;
+}
+
 .pcDec-crd{
     background-color: #33A036;
     border-radius: 1vh;
@@ -69,7 +82,15 @@
     text-align: center;
 }
 
-
+.playCardDec-crd{
+    background-color: azure;
+    height: 13dvh;
+    width : 27%;
+    margin: 1.5%;
+    border-radius: 10%;
+    justify-content: space-around;
+    padding-top: 10%;
+}
 
 
 

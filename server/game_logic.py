@@ -3,7 +3,7 @@ import random
 
 class PokerGame:
     deck = []
-
+    # -------------------------------------------------------------   micro step1    --------------------------------------------------
     def __init__(self):
         self.players = []
         self.current_turn = 0
@@ -15,6 +15,7 @@ class PokerGame:
         random.shuffle(shuffled_deck)
         return shuffled_deck
 
+# -------------------------------------------------------------  *****  major Process 1 ******   --------------------------------------------------
     def start_game(self):
         self.display_full_deck()
         self.initialize_deck()
@@ -24,6 +25,7 @@ class PokerGame:
         print(f"Game started! The first card displayed is: {self.last_card_played}")
         print(f"It's now {self.players[self.current_turn]['name']}'s turn.")
 
+# -------------------------------------------------------------  micro step 2   --------------------------------------------------
     def initialize_deck(self):
         PokerGame.deck = [
             {"rank": str(rank), "suit": suit}
@@ -31,6 +33,7 @@ class PokerGame:
             for suit in ["Hearts", "Diamonds", "Clubs", "Spades"]
         ]
 
+# -------------------------------------------------------------  micro step 3   --------------------------------------------------
     def initialize_players(self):
         self.players = [
             {"name": "User", "hand": []},
@@ -41,11 +44,17 @@ class PokerGame:
         current_player = next(player for player in self.players if player['name'] == player_name)
         print(f"{current_player['name']}'s hand: {current_player['hand']}")
 
+
+
+# -------------------------------------------------------------   unwanted code    --------------------------------------------------
     def display_full_deck(self):
         print("Full Deck:")
         for card in self.deck:
             print(f"{card['rank']} of {card['suit']}")
 
+
+# -------------------------------------------------------------   upshift event listener to react   --------------------------------------------------
+            # -------------------------------------------------------------   change logic to front end    --------------------------------------------------
     def play_card(self, player_name, card_choice=None):
         current_player = next(player for player in self.players if player['name'] == player_name)
 
@@ -75,6 +84,8 @@ class PokerGame:
 
         self.next_turn()
 
+
+# -------------------------------------------------------------   ***Front end onclick event listener  --------------------------------------------------
     def choose_card_from_hand(self, current_player):
         card_played_str = input(f"{current_player['name']}, choose a card from your hand: ")
         card_played = self.parse_card_string(card_played_str)
@@ -85,6 +96,8 @@ class PokerGame:
             card_played = self.parse_card_string(card_played_str)
 
         return card_played
+    
+    
 
     def generate_pc_move(self):
         current_player = self.players[self.current_turn]

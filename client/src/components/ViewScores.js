@@ -11,7 +11,7 @@ const handleLogOut= (e) => {
   window.location.href = '/';
 };
 
-const userName = 0;
+const userName = "user"; // pick user variable from cookie
 const gamesWon = 0;
 const gamesLost = 0;
 

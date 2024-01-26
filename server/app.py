@@ -31,6 +31,7 @@ def home():
 def get_deck():
     # Initialize the deck before the game starts
     poker_game.initialize_deck()
+    poker_game.deck = poker_game.get_shuffled_deck()
     return jsonify({"deck": poker_game.deck})
 
 @app.route("/shuffle", methods=["POST"])
@@ -39,13 +40,15 @@ def shuffle_deck():
     return jsonify({"message": "Deck shuffled successfully", "shuffled_deck": poker_game.deck})
 
 # Route to draw one card from the deck
-@app.route("/draw", methods=["POST"])
+@app.route("/draw", methods=["GET"])
 def draw_card():
     if not poker_game.deck:
         return jsonify({"message": "No cards left in the deck"})
 
     card = poker_game.deck.pop(0)
+    poker_game.generate_pc_move() # if card is picked initialize pc to make its own next move
     return jsonify({"card": card})
+    
 
 # Endpoint for User Registration
 @app.route('/register', methods=['POST'])
@@ -82,6 +85,15 @@ def login():
         return jsonify({"message": "Login successful"}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
+    
+# Endpoint for User records
+@app.route('/gameRecord')
+def get_gameRecords():
+    scores = GameRecord.query.all()
+    serialized_scores = [score.to_dict() for score in scores]
+
+    return jsonify({"scores": serialized_scores})
+
 
 # Endpoint to record Game Results, associating it with the user who played the game
 @app.route('/record_game', methods=['POST'])
@@ -97,9 +109,10 @@ def record_game():
     return jsonify({"message": "Game result recorded successfully"}), 201
 
 # Endpoint to Retrieve Scores
-@app.route('/scores', methods=['GET'])
-def get_scores():
-    scores = GameRecord.query.all()
+# change to adapt and filter according to user id
+@app.route('/scores/<int:id>', methods=['GET'])
+def get_scores(user_id):
+    scores = GameRecord.query.filter(user_id == id).first()
     serialized_scores = [score.to_dict() for score in scores]
 
     return jsonify({"scores": serialized_scores})
