@@ -50,6 +50,7 @@ function HomeLayout() {
       // console.log(displayedCard)
       setAvailableCards([...availableCards,displayedCard])
       setDisplayedCard(usrPlayedCrd);
+      handleeSpecialCardRules(usrPlayedCrd);
 
       const updatedUserHand = userHand.filter(card => card !== usrPlayedCrd);
       setUserHand(updatedUserHand);
@@ -67,33 +68,106 @@ function HomeLayout() {
   function isValidMove(aiCard) { 
     return aiCard.suit === displayedCard.suit || aiCard.rank === displayedCard.rank; 
    }
+
+   function handleSpecialCardRules(card) {
+    switch (card.rank) {
+      case '2':
+        handlePenalty(2);
+        break;
+      case '3':
+        handlePenalty(3);
+        break;
+    }
+  }
+
+  function handleeSpecialCardRules(card) {
+    switch (card.rank) {
+      case '2':
+        handleePenalty(2);
+        break;
+      case '3':
+        handleePenalty(3);
+        break;
+    }
+  }
+
+  function handleePenalty(count) {
+    for (let i = 0; i < count; i++) {
+      const drawnCard = availableCards.shift()
+      setUserHand([...userHand,drawnCard])
+      console.log('AI draws penalty card:', drawnCard);
+    }
+  }
+
+  function handlePenalty(count) {
+    for (let i = 0; i < count; i++) {
+      const drawnCard = availableCards.shift()
+      setUserHand([...userHand,drawnCard])
+      console.log('Player draws penalty card:', drawnCard);
+    }
+  }
+
+  const dropCard = (cardsToDrop) => {
+    const aiSelectedCrd = cardsToDrop[Math.floor(Math.random() * cardsToDrop.length)];
+    console.log(aiSelectedCrd, "ai played card move");
   
+    setAvailableCards([...availableCards, displayedCard]);
+    setDisplayedCard(aiSelectedCrd);
+    handleSpecialCardRules(aiSelectedCrd);
+  
+    const updatedCompHand = compHand.filter(card => !cardsToDrop.includes(card));
+    setCompHand(updatedCompHand);
+  };
+
+  const getCardRankValue = (rank) => {
+    const rankValues = {
+      'Ace': 1,
+      '2': 2,
+      '3': 3,
+      '4': 4,
+      '5': 5,
+      '6': 6,
+      '7': 7,
+      '8': 8,
+      '9': 9,
+      '10': 10,
+      'Queen': 11
+      // Add more ranks as needed
+    };
+  
+    return rankValues[rank] || 0;
+  };
+  
+  //computer logic for game continuity
   const aiLogic = () =>{
     console.log(displayedCard, "previously displayed card")
     const validMoves = compHand.filter(isValidMove);
     console.log(validMoves, "valid moves")
+    
     if (validMoves.length > 0) {
-      const aiSelectedCrd = validMoves[Math.floor(Math.random() * validMoves.length)];
-      // discardPile.push(selectedCard);
-      console.log(aiSelectedCrd, "ai played card move")
-      setAvailableCards([...availableCards,displayedCard])
-      setDisplayedCard(aiSelectedCrd);
-
-      const updatedCompHand = compHand.filter(card => card !== aiSelectedCrd);
-      setCompHand(updatedCompHand);
-    } else {
+     
+      const specialMoves = validMoves.filter(card => card.rank === 'Queen' || card.rank === '8');
+      if (specialMoves.length > 0) {
+        dropCard(specialMoves);
+      } else {
+        // Prioritize dropping cards with the same suit as the displayed card
+        const sameSuitMoves = validMoves.filter(card => card.suit === displayedCard.suit);
+        if (sameSuitMoves.length > 0) {
+          dropCard(sameSuitMoves);
+        } else {
+          // If no special or same suit moves, prioritize dropping lower-ranked cards
+          validMoves.sort((a, b) => getCardRankValue(a.rank) - getCardRankValue(b.rank));
+          dropCard([validMoves[0]]);
+        }
+      }
+    }else {
       // Computer draws a card
       const aiPickedCrd = availableCards.shift()
       setCompHand([...compHand,aiPickedCrd])
       console.log(aiPickedCrd, "ai picked card")
     }
 
-    
-      
-    
-    
-
-  }
+  };
 
   // function checkForWinner() {
   //   if (playerHand.length === 0) {
