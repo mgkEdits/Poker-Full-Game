@@ -5,7 +5,8 @@ import NavBar from './navBar'
 import NavCenter from './navCenter'
 
 function HomeLayout() {
-  let discardPile = [];
+
+
   // const [playedCard, setPlayedCard] = useState([]);
   // const [gameCard, setGameCard] = useState([]);
 
@@ -13,12 +14,15 @@ function HomeLayout() {
   const [userHand, setUserHand] = useState([]);
   const [compHand, setCompHand] = useState([]);
   const [availableCards, setAvailableCards] = useState([]);
+  // const [discardPile, setDiscardPile] = useState([]);
   const [userTurn, setUserTurn] = useState(false);
+
 
   const handlePickCard=( )=>{
      const usrPickedCrd = availableCards.shift()
      setUserHand([...userHand,usrPickedCrd])
-     setTimeout(aiLogic(),3000);
+     console.log(usrPickedCrd, "user picked card")
+     setTimeout(aiLogic,3000);
   }
   console.log(availableCards);
 
@@ -37,59 +41,67 @@ function HomeLayout() {
       });
   }, []);
 
-  const playCard = (cardIndex,card) => {
+  const playCard = (card) => {
     const usrPlayedCrd = card
-    console.log(usrPlayedCrd);
+    console.log(usrPlayedCrd,'user played card');
 
     if (usrPlayedCrd.rank === displayedCard.rank ||usrPlayedCrd.suit === displayedCard.suit ){
-      console.log("correct card")
+      // setDiscardPile([...discardPile,displayedCard]);
+      // console.log(displayedCard)
       setAvailableCards([...availableCards,displayedCard])
       setDisplayedCard(usrPlayedCrd);
-      console.log("its now ai`s turn") ///create alert for user
-      setTimeout(aiLogic(),3000);
+
+      const updatedUserHand = userHand.filter(card => card !== usrPlayedCrd);
+      setUserHand(updatedUserHand);
+
+      console.log("its now ai`s turn") // Call the function for AI logic after a delay
+      setTimeout(aiLogic,3000);
       //function for comp to play
     }else{
-      console.log("wrong Card card")
+     
       alert("Pick another card")
-      console.log(availableCards)
     }
   };
 
+  
+  function isValidMove(aiCard) { 
+    return aiCard.suit === displayedCard.suit || aiCard.rank === displayedCard.rank; 
+   }
+  
   const aiLogic = () =>{
+    console.log(displayedCard, "previously displayed card")
+    const validMoves = compHand.filter(isValidMove);
+    console.log(validMoves, "valid moves")
+    if (validMoves.length > 0) {
+      const aiSelectedCrd = validMoves[Math.floor(Math.random() * validMoves.length)];
+      // discardPile.push(selectedCard);
+      console.log(aiSelectedCrd, "ai played card move")
+      setAvailableCards([...availableCards,displayedCard])
+      setDisplayedCard(aiSelectedCrd);
 
-    // function isValidMove(aicard) { 
-    //   const topCard = discardPile[discardPile.length – 1];
-    //    return card.suit === topCard.suit || card.rank === topCard.rank; 
-    //   }
-      
-    // compHand.forEach( compCrd => {
-    //   if (compCrd.rank === displayedCard.rank ||compCrd.suit === displayedCard.suit ){
-    //     console.log("correct card")
-    //     setAvailableCards([...availableCards,displayedCard])
-    //     setDisplayedCard(compCrd);
-    //     console.log("its now your turn")   // create alert for user
-    //   } 
-      
-    // });
-
-    // if (condition) {
-      
-    // } else{
-    //   //logic for ai to pick card 
-    //   const aiPickedCrd = availableCards.shift()
-    //   setCompHand([...compHand,aiPickedCrd])
-    //   console.log("its now your turn")   // create alert for user
-    // }
-
-  }
-
-  function checkForWinner() {
-    if (playerHand.length === 0) {
-      console.log('Player wins!');
-    } else if (computerHand.length === 0) {
-      console.log('Computer wins!');
+      const updatedCompHand = compHand.filter(card => card !== aiSelectedCrd);
+      setCompHand(updatedCompHand);
+    } else {
+      // Computer draws a card
+      const aiPickedCrd = availableCards.shift()
+      setCompHand([...compHand,aiPickedCrd])
+      console.log(aiPickedCrd, "ai picked card")
     }
+
+    
+      
+    
+    
+
   }
+
+  // function checkForWinner() {
+  //   if (playerHand.length === 0) {
+  //     console.log('Player wins!');
+  //   } else if (computerHand.length === 0) {
+  //     console.log('Computer wins!');
+  //   }
+  // }
 
   return (
     <div className='homeLayout-crd'>
@@ -102,7 +114,7 @@ function HomeLayout() {
         {userTurn && (
           <div className='userDec-crrd'>
             {userHand.map((card, index) => (
-              <div  className='playCardDec-crd' key={index} onClick={() => playCard(index,card)}>
+              <div  className='playCardDec-crd' key={index} onClick={() => playCard(card)}>
                 <p>{card.rank} </p> 
                 <p>*{card.suit}* </p>
               </div>
@@ -141,8 +153,8 @@ function HomeLayout() {
               {compHand.map((card, index) => (
                 <div  className='playCardDec-crd' key={index} onClick={() => playCard(index)}>
                   
-                  <p>**</p> 
-                  <p>***</p> 
+                <p>{card.rank} </p> 
+                <p>*{card.suit}* </p>
                   
                 </div>
               ))}
