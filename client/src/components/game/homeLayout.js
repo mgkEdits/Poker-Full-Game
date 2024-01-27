@@ -67,7 +67,6 @@ function HomeLayout() {
         <h2>Your Hand</h2>
         {userTurn && (
           <div className='userDec-crrd'>
-            
             {userHand.map((card, index) => (
               <div  className='playCardDec-crd' key={index} onClick={() => playCard(index)}>
                 <p>{card.rank} </p> 
@@ -85,9 +84,7 @@ function HomeLayout() {
             <div className='gamedec-crd' /*-------  Game Table Section  ---------*/>
               <p>Game Table </p>
                 <div className='crdd-wrp'>
-                <div className='crd-crd'/*-------  Played Card Section  ---------*/>
-                <h2>Played Card</h2>
-                </div>
+                
                 
                 <div className='crd-crd'/*-------  Game Card Section  ---------*/>
                 {displayedCard && (
