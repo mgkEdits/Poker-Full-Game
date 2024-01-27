@@ -5,6 +5,7 @@ import NavBar from './navBar'
 import NavCenter from './navCenter'
 
 function HomeLayout() {
+  let discardPile = [];
   // const [playedCard, setPlayedCard] = useState([]);
   // const [gameCard, setGameCard] = useState([]);
 
@@ -15,12 +16,9 @@ function HomeLayout() {
   const [userTurn, setUserTurn] = useState(false);
 
   const handlePickCard=( )=>{
-    axios.get('http://127.0.0.1:5555/draw')
-      .then(response =>{
-        const pickedCard = response.data;
-        setUserHand([userHand.push(pickedCard)]); //add picked card to user hand destructively
-      })
-        // availableCards
+     const usrPickedCrd = availableCards.shift()
+     setUserHand([...userHand,usrPickedCrd])
+     setTimeout(aiLogic(),3000);
   }
   console.log(availableCards);
 
@@ -39,23 +37,59 @@ function HomeLayout() {
       });
   }, []);
 
-  // const startGame = () => {
-  //   axios.get('http://localhost:5555/start_game')
-  //     .then(response => {
-  //       setDisplayedCard(response.data.displayed_card);
-  //       setUserTurn(true);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error starting the game:', error);
-  //     });
-  // };
+  const playCard = (cardIndex,card) => {
+    const usrPlayedCrd = card
+    console.log(usrPlayedCrd);
 
-  const playCard = (cardIndex) => {
-     axios.get('http://localhost:5555/start_game')
-    // Implement the logic to play a card
-    // Update the 'userTurn', 'displayedCard', 'userHand', 'compHand', and 'availableCards' state accordingly
-    // Make a POST request to '/play_card' endpoint on the Flask server
+    if (usrPlayedCrd.rank === displayedCard.rank ||usrPlayedCrd.suit === displayedCard.suit ){
+      console.log("correct card")
+      setAvailableCards([...availableCards,displayedCard])
+      setDisplayedCard(usrPlayedCrd);
+      console.log("its now ai`s turn") ///create alert for user
+      setTimeout(aiLogic(),3000);
+      //function for comp to play
+    }else{
+      console.log("wrong Card card")
+      alert("Pick another card")
+      console.log(availableCards)
+    }
   };
+
+  const aiLogic = () =>{
+
+    // function isValidMove(aicard) { 
+    //   const topCard = discardPile[discardPile.length – 1];
+    //    return card.suit === topCard.suit || card.rank === topCard.rank; 
+    //   }
+      
+    // compHand.forEach( compCrd => {
+    //   if (compCrd.rank === displayedCard.rank ||compCrd.suit === displayedCard.suit ){
+    //     console.log("correct card")
+    //     setAvailableCards([...availableCards,displayedCard])
+    //     setDisplayedCard(compCrd);
+    //     console.log("its now your turn")   // create alert for user
+    //   } 
+      
+    // });
+
+    // if (condition) {
+      
+    // } else{
+    //   //logic for ai to pick card 
+    //   const aiPickedCrd = availableCards.shift()
+    //   setCompHand([...compHand,aiPickedCrd])
+    //   console.log("its now your turn")   // create alert for user
+    // }
+
+  }
+
+  function checkForWinner() {
+    if (playerHand.length === 0) {
+      console.log('Player wins!');
+    } else if (computerHand.length === 0) {
+      console.log('Computer wins!');
+    }
+  }
 
   return (
     <div className='homeLayout-crd'>
@@ -68,7 +102,7 @@ function HomeLayout() {
         {userTurn && (
           <div className='userDec-crrd'>
             {userHand.map((card, index) => (
-              <div  className='playCardDec-crd' key={index} onClick={() => playCard(index)}>
+              <div  className='playCardDec-crd' key={index} onClick={() => playCard(index,card)}>
                 <p>{card.rank} </p> 
                 <p>*{card.suit}* </p>
               </div>

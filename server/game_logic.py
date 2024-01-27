@@ -29,7 +29,7 @@ class PokerGame:
     def initialize_deck(self):
         PokerGame.deck = [
             {"rank": str(rank), "suit": suit}
-            for rank in list(range(2, 11)) + ["A"]
+            for rank in list(range(2, 11)) + ["A","Q"]
             for suit in ["Hearts", "Diamonds", "Clubs", "Spades"]
         ]
 
