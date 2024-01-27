@@ -48,12 +48,14 @@ function HomeLayout() {
     if (usrPlayedCrd.rank === displayedCard.rank ||usrPlayedCrd.suit === displayedCard.suit ){
       // setDiscardPile([...discardPile,displayedCard]);
       // console.log(displayedCard)
-      setAvailableCards([...availableCards,displayedCard])
+      // setAvailableCards([...availableCards,displayedCard])
       setDisplayedCard(usrPlayedCrd);
       handleeSpecialCardRules(usrPlayedCrd);
 
       const updatedUserHand = userHand.filter(card => card !== usrPlayedCrd);
       setUserHand(updatedUserHand);
+
+      setTimeout(checkForWinner,2000);
 
       console.log("its now ai`s turn") // Call the function for AI logic after a delay
       setTimeout(aiLogic,3000);
@@ -62,6 +64,7 @@ function HomeLayout() {
      
       alert("Pick another card")
     }
+    
   };
 
   
@@ -111,12 +114,13 @@ function HomeLayout() {
     const aiSelectedCrd = cardsToDrop[Math.floor(Math.random() * cardsToDrop.length)];
     console.log(aiSelectedCrd, "ai played card move");
   
-    setAvailableCards([...availableCards, displayedCard]);
+    // setAvailableCards([...availableCards, displayedCard]);
     setDisplayedCard(aiSelectedCrd);
     handleSpecialCardRules(aiSelectedCrd);
   
     const updatedCompHand = compHand.filter(card => !cardsToDrop.includes(card));
     setCompHand(updatedCompHand);
+    setTimeout(checkForWinner,2000);
   };
 
   const getCardRankValue = (rank) => {
@@ -166,16 +170,15 @@ function HomeLayout() {
       setCompHand([...compHand,aiPickedCrd])
       console.log(aiPickedCrd, "ai picked card")
     }
-
   };
 
-  // function checkForWinner() {
-  //   if (playerHand.length === 0) {
-  //     console.log('Player wins!');
-  //   } else if (computerHand.length === 0) {
-  //     console.log('Computer wins!');
-  //   }
-  // }
+  function checkForWinner() {
+    if (userHand.length === 0) {
+      console.log('Player wins!');
+    } else if (compHand.length === 0) {
+      console.log('Computer wins!');
+    }
+  }
 
   return (
     <div className='homeLayout-crd'>
