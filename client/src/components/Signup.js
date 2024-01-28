@@ -35,7 +35,10 @@ const Signup = () => {
       if (response.ok) {
         setMessage(data.message);
 
-        // Redirect to the gamepage
+        // Save username in local storage
+        localStorage.setItem('username', username);
+
+        // Redirect to the game page
         window.location.href = '/Home';
       } else {
         setMessage(data.message);
