@@ -1,76 +1,82 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useSetRecoilState, useRecoilValue } from 'recoil';
+import { gameScoresState } from './atoms'; // Adjust the path as needed
 
 const ViewScores = () => {
+  const [loading, setLoading] = useState(true);
+  const username = localStorage.getItem('username') || 'user';
 
-  // Retrieve username from local storage or state
-  const activeUsername = localStorage.getItem('username') || 'example';
-  const [gamesWon, setGamesWon] = useState(0);
-  const [gamesLost, setGamesLost] = useState(0);
-  
-  const handleNewGame= (e) => {
-    e.preventDefault();
-    window.location.href = '/PokerGame'; // implementing passing props
-  };
+  const setGameScores = useSetRecoilState(gameScoresState);
+  const { gamesWon, gamesLost } = useRecoilValue(gameScoresState);
 
-const handleLogOut= (e) => {
-  e.preventDefault();
-  window.location.href = '/';
-};
+  const fetchScores = async () => {
+    try {
+      const url = `http://localhost:5555/scores?username=${username}`;
+      const response = await fetch(url);
 
-useEffect(() => {
-  axios.get('http://localhost:5555/scores')
-    .then(response => {
-      const allUserData = response.data.scores;
-      console.log(allUserData)
-      console.log(activeUsername)
-      const userData = allUserData.filter(user => user.username === activeUsername);
+      if (!response.ok) {
+        throw new Error(`Server responded with status ${response.status}`);
+      }
 
-      // Use userData as needed
-      console.log(userData);
-      // Calculate games won and lost
+      const data = await response.json();
+
       let wonCount = 0;
       let lostCount = 0;
 
-      userData.forEach(user => {
-        if (user.result === 1) {
-          wonCount += 1;
-        } else {
-          lostCount += 1;
+      data.scores.forEach((score) => {
+        if (score.result === 1) {
+          wonCount++;
+        } else if (score.result === 0) {
+          lostCount++;
         }
       });
-      setGamesWon(wonCount);
-      setGamesLost(lostCount);
 
-    })
-    .catch(error => {
-      console.error('Error fetching Users:', error);
-    });
-}, [activeUsername]);
+      setGameScores({ gamesWon: wonCount, gamesLost: lostCount });
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching scores:', error);
+    }
+  };
 
+  useEffect(() => {
+    // Call the fetchScores function when the component mounts
+    fetchScores();
+  }, []); // The empty dependency array ensures that the effect runs only once on mount
+
+  const handleNewGame = (e) => {
+    e.preventDefault();
+    window.location.href = '/PokerGame';
+  };
+
+  const handleLogOut = (e) => {
+    e.preventDefault();
+    window.location.href = '/';
+  };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
-    
-    <div className='home-wrp'>
-       <div className='right-sqr'>
-       <div className='title-sqr'>
-       <h1> Poker Game </h1>
-       </div>
-       <div className='score-sqr'>
-        <h3 className='url'> {activeUsername} Score History</h3>
-        <h4> Game Won: {gamesWon}</h4>
-        <h4> Game Lost: {gamesLost}</h4>
-    </div>
+    <div className="home-wrp">
+      <div className="right-sqr">
+        <div className="title-sqr">
+          <h1> Poker Game </h1>
+        </div>
+        <div className="score-sqr">
+          <h3 className="url"> {username} Score History</h3>
+          <h4> Games Won: {gamesWon}</h4>
+          <h4> Games Lost: {gamesLost}</h4>
+        </div>
       </div>
 
-      <div className='left-sqr'>
-        <button  onClick={handleNewGame}  >Start New Game</button>
-        <button className='active'>View Scores</button>
-        <button  onClick={handleLogOut}> Log Out</button>
+      <div className="left-sqr">
+        <button onClick={handleNewGame}>New Game</button>
+        <button className="active">View Scores</button>
+        <button onClick={handleLogOut}> Log Out</button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ViewScores
+export default ViewScores;
