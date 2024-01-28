@@ -22,8 +22,8 @@ function HomeLayout() {
   const handlePickCard=( )=>{
      const usrPickedCrd = availableCards.shift()
      setUserHand([...userHand,usrPickedCrd])
-     console.log(usrPickedCrd, "user picked card")
-     setTimeout(aiLogic,3000);
+     console.log(usrPickedCrd, "user  clicked pick-card  ||  card added to your-hand")
+     setTimeout(aiLogic,10000);
   }
   console.log(availableCards);
 
@@ -45,33 +45,40 @@ function HomeLayout() {
     // crtTopCard.unshift(displayedCard)
     // console.log(crtTopCard,"array of previous game cards")
     let newTopCard = [...crtTopCard,displayedCard]
-    console.log(newTopCard,"array of previous game cards")
-    const crtTopCrd = newTopCard[newTopCard.length-1]
+    console.log(newTopCard,"array of previous  game-cards")
+    const crtTopCrd = newTopCard[0]
     // const crtTopCrd = crtTopCard[0]
-    console.log(crtTopCrd,'top card on index 0');
+    console.log(crtTopCrd,'top card  || currently active game-card');
 
   const playCard = (card) => {
     const usrPlayedCrd = card
-    console.log(usrPlayedCrd,'user played card');
+    console.log(usrPlayedCrd,'user-played card');
 
     if (usrPlayedCrd.rank === crtTopCrd.rank ||usrPlayedCrd.suit === crtTopCrd.suit ){
-      // setDiscardPile([...discardPile,displayedCard]);
-      // console.log(displayedCard)
-      // setAvailableCards([...availableCards,displayedCard])
       
       setDisplayedCard(usrPlayedCrd);
+      console.log("-------------------istep 1 setting display card===============")
       crtTopCard.push([usrPlayedCrd])
-      handleeSpecialCardRules(usrPlayedCrd); //passing penalty to pc
+      console.log("-------------------istep 2   setting crtTopCard results below  ===============")
+      console.log(displayedCard,"supposed active game-card to be  || usestate method -- setdisplay")
       console.log(crtTopCard,"new displayed card")
 
       const updatedUserHand = userHand.filter(card => card !== usrPlayedCrd);
       setUserHand(updatedUserHand);
-
-      setTimeout(checkForWinner,2000);
-
-      console.log("its now ai`s turn") // Call the function for AI logic after a delay
-      setTimeout(aiLogic,3000);
-      //function for comp to play
+      console.log("-------------------istep 4 updated userHand (no-of-cards - 1 )===============")
+      setTimeout(checkForWinner,200);
+      console.log("-------------------istep 5  checking penalty possibility===============")
+      if (usrPlayedCrd.rank < 4) {
+        handleeSpecialCardRulesUserHand(usrPlayedCrd);
+        console.log("-------------------istep optn 5.1 penalty rules applied [user plays again] ===============")
+      }else{
+        //function for comp to play
+        console.log("-------------------istep optn 5.2 penalty not applied ===============")
+        console.log("its now ai`s turn") // Call the function for AI logic after a delay
+        setTimeout(aiLogic,10000);
+      }
+      console.log("------------------- final istep [ user Logic]  ===============")
+      
     }else{
      
       alert("Pick another card")
@@ -84,7 +91,7 @@ function HomeLayout() {
     return aiCard.suit === crtTopCrd.suit || aiCard.rank === crtTopCrd.rank; 
    }
 
-   function handleSpecialCardRules(card) {
+   function handleSpecialCardRulesCompHand(card) {//handle special hand played by computer
     switch (card.rank) {
       case '2':
         handlePenalty(2);
@@ -95,7 +102,7 @@ function HomeLayout() {
     }
   }
 
-  function handleeSpecialCardRules(card) {
+  function handleeSpecialCardRulesUserHand(card) { //handle special hand played by user
     switch (card.rank) {
       case '2':
         handleePenalty(2);
@@ -106,7 +113,7 @@ function HomeLayout() {
     }
   }
 
-  function handleePenalty(count) { 
+  function handleePenalty(count) {  //handle special hand played by user
 
     setCompHand(prevCompHand => {
       const updatedCompHand = [...prevCompHand];
@@ -117,6 +124,7 @@ function HomeLayout() {
       }
       return updatedCompHand;
     });
+    console.log(compHand)
   //   for (let i = 0; i < count; i++) {
   //     const drawnCard = availableCards.shift()
   //     setCompHand([...compHand,drawnCard])
@@ -135,7 +143,10 @@ function HomeLayout() {
         console.log('Player draws penalty card:', drawnCard);
       }
       return updatedUserHand;
+    
+
     });
+    console.log(userHand)
     // for (let i = 0; i < count; i++) {
     //   const drawnCard = availableCards.shift()
     //   setUserHand([...userHand,drawnCard])
@@ -151,7 +162,7 @@ function HomeLayout() {
     // setAvailableCards([...availableCards, displayedCard]);
     // crtTopCard.push([aiSelectedCrd])
     setDisplayedCard(aiSelectedCrd);
-    handleSpecialCardRules(aiSelectedCrd);
+    handleSpecialCardRulesCompHand(aiSelectedCrd);
   
     const updatedCompHand = compHand.filter(card => card !== aiSelectedCrd);
     setCompHand(updatedCompHand);
