@@ -7,6 +7,8 @@ from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, GameRecord
 from game_logic import PokerGame
+from flask import abort
+
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})  # Adjust the origin as needed
@@ -34,20 +36,20 @@ def get_deck():
     poker_game.deck = poker_game.get_shuffled_deck()
     return jsonify({"deck": poker_game.deck})
 
-# @app.route("/shuffle", methods=["POST"])
-# def shuffle_deck():
-#     poker_game.deck = poker_game.get_shuffled_deck()
-#     return jsonify({"message": "Deck shuffled successfully", "shuffled_deck": poker_game.deck})
+@app.route("/shuffle", methods=["POST"])
+def shuffle_deck():
+    poker_game.deck = poker_game.get_shuffled_deck()
+    return jsonify({"message": "Deck shuffled successfully", "shuffled_deck": poker_game.deck})
 
-# # Route to draw one card from the deck
-# @app.route("/draw", methods=["GET"])
-# def draw_card():
-#     if not poker_game.deck:
-#         return jsonify({"message": "No cards left in the deck"})
+# Route to draw one card from the deck
+@app.route("/draw", methods=["GET"])
+def draw_card():
+    if not poker_game.deck:
+        return jsonify({"message": "No cards left in the deck"})
 
-#     card = poker_game.deck.pop(0)
-#     poker_game.generate_pc_move() # if card is picked initialize pc to make its own next move
-#     return jsonify({"card": card})
+    card = poker_game.deck.pop(0)
+    poker_game.generate_pc_move() # if card is picked initialize pc to make its own next move
+    return jsonify({"card": card})
     
 
 # Endpoint for User Registration
@@ -86,21 +88,13 @@ def login():
     else:
         return jsonify({"message": "Invalid credentials"}), 401
     
-# Updated route to fetch only username and user_id
-@app.route('/users', methods=['GET'])
-def get_all_users():
-    users = User.query.all()
-    user_data = [{"user_id": user.user_id, "username": user.username} for user in users]
-
-    return jsonify({"users": user_data})
-    
 # Endpoint for User records
-# @app.route('/gameRecord')
-# def get_gameRecords():
-#     scores = GameRecord.query.all()
-#     serialized_scores = [score.to_dict() for score in scores]
+@app.route('/gameRecord')
+def get_gameRecords():
+    scores = GameRecord.query.all()
+    serialized_scores = [score.to_dict() for score in scores]
 
-#     return jsonify({"scores": serialized_scores})
+    return jsonify({"scores": serialized_scores})
 
 
 # Endpoint to record Game Results, associating it with the user who played the game
@@ -118,6 +112,7 @@ def record_game():
 
 # Endpoint to Retrieve Scores
 # change to adapt and filter according to user id
+# Corrected route to fetch game records for a specific user
 @app.route('/scores/<int:user_id>', methods=['GET'])
 def get_scores(user_id):
     user = User.query.get(user_id)
@@ -136,16 +131,28 @@ def get_scores(user_id):
         }
         for score in scores
     ]
+
     return jsonify({"scores": serialized_scores})
 
 
+
+# Update the /scores endpoint in app.py
+
+
+
 @app.route('/scores', methods=['GET'])
-def get_all_scores():
-    all_scores = GameRecord.query.all()
+def get_user_scores():
+    username = request.args.get('username')
 
-    if not all_scores:
-        return jsonify({"message": "No scores found"}), 404
+    if not username:
+        return jsonify({"message": "Username is required"}), 400
 
+    user = User.query.filter_by(username=username).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    scores = GameRecord.query.filter_by(user_id=user.user_id).all()
     serialized_scores = [
         {
             'username': user.username,
@@ -154,12 +161,35 @@ def get_all_scores():
             'timestamp': score.timestamp
             # Add more fields as needed
         }
-        for score in all_scores
-        for user in User.query.filter_by(user_id=score.user_id)
+        for score in scores
     ]
 
     return jsonify({"scores": serialized_scores})
-    
+
+@app.route('/scores/<string:username>', methods=['GET'])
+def get_scores_by_username(username):
+    if not username:
+        return jsonify({"message": "Username is required"}), 400
+
+    user = User.query.filter_by(username=username).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    scores = GameRecord.query.filter_by(user_id=user.user_id).all()
+    serialized_scores = [
+        {
+            'username': user.username,
+            'game_id': score.game_id,
+            'result': score.result,
+            'timestamp': score.timestamp
+            # Add more fields as needed
+        }
+        for score in scores
+    ]
+
+    return jsonify({"scores": serialized_scores})
+
 # Route to start the game
 @app.route('/start_game', methods=['GET'])
 def start_game():
