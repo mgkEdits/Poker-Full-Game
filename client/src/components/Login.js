@@ -37,10 +37,10 @@ const Login = () => {
       if (response.ok) {
         setMessage(data.message);
 
-        // Save the username to local storage or state
+        // Store the username in localStorage
         localStorage.setItem('username', username);
 
-        // Redirect to the gamepage after successful login
+        // Redirect to the home page after successful login
         navigate('/Home');
       } else {
         setMessage(data.message);
