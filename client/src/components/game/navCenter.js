@@ -1,11 +1,25 @@
 import React from 'react'
+import { useState, useEffect } from 'react';
 
-function navCenter() {
+function NavCenter() {
+  const [timer, setTimer] = useState(0);
+
+  useEffect(() => {
+    const timerInterval = setInterval(() => {
+      setTimer((prevTimer) => prevTimer + 1);
+    }, 1000);
+
+    return () => clearInterval(timerInterval);
+  }, []);
+
+  // Convert seconds to minutes and seconds
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
+
   return (
     <div className='navCenter-crd'>
         <div className='left-navBar'>
-        <a href=''>Pause Game</a>
-        <a href=''>Timer :</a>
+        <a href=''>Timer : {minutes}m {seconds}s</a>
         </div>
 
         <div className='right-navBar'>
@@ -16,4 +30,4 @@ function navCenter() {
   )
 }
 
-export default navCenter
+export default NavCenter

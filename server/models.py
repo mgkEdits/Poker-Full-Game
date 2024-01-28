@@ -15,9 +15,18 @@ class User(db.Model, SerializerMixin):
     games = db.relationship('GameRecord', backref='users', lazy=True)
 
 class GameRecord(db.Model, SerializerMixin):
-    __tablename__ = 'game_records'
+    _tablename_ = 'game_records'
 
     game_id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     result = db.Column(db.Integer, nullable=False)
     timestamp = db.Column(db.TIMESTAMP, server_default=db.func.current_timestamp(), nullable=False)
+
+    def to_dict(self):
+        return {
+            'game_id': self.game_id,
+            'user_id': self.user_id,
+            'result': self.result,
+            'timestamp': self.timestamp
+            # Add more fields as needed
+        }

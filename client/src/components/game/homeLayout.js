@@ -6,8 +6,9 @@ import NavCenter from './navCenter'
 
 function HomeLayout() {
 
-
-  // const [playedCard, setPlayedCard] = useState([]);
+   let crtTopCard = [];
+   
+  // const [crtTopCard, setPlayedCard] = useState([]);
   // const [gameCard, setGameCard] = useState([]);
 
   const [displayedCard, setDisplayedCard] = useState(null);
@@ -15,7 +16,7 @@ function HomeLayout() {
   const [compHand, setCompHand] = useState([]);
   const [availableCards, setAvailableCards] = useState([]);
   // const [discardPile, setDiscardPile] = useState([]);
-  const [userTurn, setUserTurn] = useState(false);
+  // const [userTurn, setUserTurn] = useState(false);
 
 
   const handlePickCard=( )=>{
@@ -34,23 +35,34 @@ function HomeLayout() {
         setUserHand([...deck.slice(0, 4)]); // Initial user hand (4 cards)
         setCompHand([...deck.slice(4, 8)]); // Initial comp hand (4 cards)
         setAvailableCards([...deck.slice(8)]); // Remaining cards for available cards
-        setUserTurn(true);
+        // setUserTurn(true);
       })
       .catch(error => {
         console.error('Error fetching deck:', error);
       });
   }, []);
+    
+    // crtTopCard.unshift(displayedCard)
+    // console.log(crtTopCard,"array of previous game cards")
+    let newTopCard = [...crtTopCard,displayedCard]
+    console.log(newTopCard,"array of previous game cards")
+    const crtTopCrd = newTopCard[newTopCard.length-1]
+    // const crtTopCrd = crtTopCard[0]
+    console.log(crtTopCrd,'top card on index 0');
 
   const playCard = (card) => {
     const usrPlayedCrd = card
     console.log(usrPlayedCrd,'user played card');
 
-    if (usrPlayedCrd.rank === displayedCard.rank ||usrPlayedCrd.suit === displayedCard.suit ){
+    if (usrPlayedCrd.rank === crtTopCrd.rank ||usrPlayedCrd.suit === crtTopCrd.suit ){
       // setDiscardPile([...discardPile,displayedCard]);
       // console.log(displayedCard)
       // setAvailableCards([...availableCards,displayedCard])
+      
       setDisplayedCard(usrPlayedCrd);
-      handleeSpecialCardRules(usrPlayedCrd);
+      crtTopCard.push([usrPlayedCrd])
+      handleeSpecialCardRules(usrPlayedCrd); //passing penalty to pc
+      console.log(crtTopCard,"new displayed card")
 
       const updatedUserHand = userHand.filter(card => card !== usrPlayedCrd);
       setUserHand(updatedUserHand);
@@ -69,7 +81,7 @@ function HomeLayout() {
 
   
   function isValidMove(aiCard) { 
-    return aiCard.suit === displayedCard.suit || aiCard.rank === displayedCard.rank; 
+    return aiCard.suit === crtTopCrd.suit || aiCard.rank === crtTopCrd.rank; 
    }
 
    function handleSpecialCardRules(card) {
@@ -94,20 +106,42 @@ function HomeLayout() {
     }
   }
 
-  function handleePenalty(count) {
-    for (let i = 0; i < count; i++) {
-      const drawnCard = availableCards.shift()
-      setUserHand([...userHand,drawnCard])
-      console.log('AI draws penalty card:', drawnCard);
-    }
+  function handleePenalty(count) { 
+
+    setCompHand(prevCompHand => {
+      const updatedCompHand = [...prevCompHand];
+      for (let i = 0; i < count; i++) {
+        const drawnCard = availableCards.shift();
+        updatedCompHand.push(drawnCard);
+        console.log('AI draws penalty card:', drawnCard);
+      }
+      return updatedCompHand;
+    });
+  //   for (let i = 0; i < count; i++) {
+  //     const drawnCard = availableCards.shift()
+  //     setCompHand([...compHand,drawnCard])
+  //     console.log('AI draws penalty card:', drawnCard);
+  //     console.log(compHand)
+  //   }
   }
 
   function handlePenalty(count) {
-    for (let i = 0; i < count; i++) {
-      const drawnCard = availableCards.shift()
-      setUserHand([...userHand,drawnCard])
-      console.log('Player draws penalty card:', drawnCard);
-    }
+
+    setUserHand(prevUserHand => {
+      const updatedUserHand = [...prevUserHand];
+      for (let i = 0; i < count; i++) {
+        const drawnCard = availableCards.shift();
+        updatedUserHand.push(drawnCard);
+        console.log('Player draws penalty card:', drawnCard);
+      }
+      return updatedUserHand;
+    });
+    // for (let i = 0; i < count; i++) {
+    //   const drawnCard = availableCards.shift()
+    //   setUserHand([...userHand,drawnCard])
+    //   console.log('Player draws penalty card:', drawnCard);
+    //   console.log(userHand)
+    // }
   }
 
   const dropCard = (cardsToDrop) => {
@@ -115,10 +149,11 @@ function HomeLayout() {
     console.log(aiSelectedCrd, "ai played card move");
   
     // setAvailableCards([...availableCards, displayedCard]);
+    // crtTopCard.push([aiSelectedCrd])
     setDisplayedCard(aiSelectedCrd);
     handleSpecialCardRules(aiSelectedCrd);
   
-    const updatedCompHand = compHand.filter(card => !cardsToDrop.includes(card));
+    const updatedCompHand = compHand.filter(card => card !== aiSelectedCrd);
     setCompHand(updatedCompHand);
     setTimeout(checkForWinner,2000);
   };
@@ -144,7 +179,7 @@ function HomeLayout() {
   
   //computer logic for game continuity
   const aiLogic = () =>{
-    console.log(displayedCard, "previously displayed card")
+    console.log(crtTopCrd, "previously displayed card")
     const validMoves = compHand.filter(isValidMove);
     console.log(validMoves, "valid moves")
     
@@ -188,7 +223,7 @@ function HomeLayout() {
       <div className='crd-wrap'/*-------  User Cards Section  ---------*/>
         <div className='userDec-crd'>
         <h2>Your Hand</h2>
-        {userTurn && (
+        
           <div className='userDec-crrd'>
             {userHand.map((card, index) => (
               <div  className='playCardDec-crd' key={index} onClick={() => playCard(card)}>
@@ -197,7 +232,7 @@ function HomeLayout() {
               </div>
             ))}
           </div>
-        )}
+        
      </div>
         <div className='crd-shell'>
             <div className='cardDec-crd'  onClick={handlePickCard}/*-------  Pick Cards Section  ---------*/ > 
@@ -224,7 +259,7 @@ function HomeLayout() {
         </div>
         <div className='pcDec-crd' /*-------  pc Cards Section  ---------*/>
           <h2>pc Cards</h2>
-          {userTurn && (
+          
             <div className='userDec-crrd'>
               
               {compHand.map((card, index) => (
@@ -236,7 +271,7 @@ function HomeLayout() {
                 </div>
               ))}
             </div>
-          )}
+         
         </div>
       </div>
       <div className='btn'>

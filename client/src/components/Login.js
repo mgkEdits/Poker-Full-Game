@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate from react-router-dom
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const navigate = useNavigate(); // Use the useNavigate hook
+  const navigate = useNavigate();
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -36,6 +36,9 @@ const Login = () => {
 
       if (response.ok) {
         setMessage(data.message);
+
+        // Save the username to local storage or state
+        localStorage.setItem('username', username);
 
         // Redirect to the gamepage after successful login
         navigate('/Home');
